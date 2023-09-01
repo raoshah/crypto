@@ -4,8 +4,17 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from myapp.models import UserPost
+import requests
+from bs4 import BeautifulSoup
 
 def index(request):
+    url = 'https://www.coinmarketcap.com/'
+    request1 = requests.get(url)
+    soup = BeautifulSoup(request1.text, 'html')
+    coin_list = []
+    for item in soup.find_all('span', class_="crypto-symbol"):
+        coin = item.text.strip()
+        coin_list.append(coin)
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
     userpost = UserPost.objects.all()
@@ -15,7 +24,7 @@ def index(request):
         post_add = UserPost(username=username, userpost=post)
         post_add.save()
         return HttpResponseRedirect(reverse("index"))
-    return render(request, "myapp/index.html", {"userpost":userpost})
+    return render(request, "myapp/index.html", {"userpost":userpost, "coin_list": coin_list})
 
 
 def login_user(request): 

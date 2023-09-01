@@ -2,6 +2,13 @@
  {% extends 'myapp/layout.html' %}
 {% block body %}
     <h1>myapp</h1> <a href="logout/">Logout</a>
+    {% for item in coin_list %}
+    
+    <p style="text-align: center;">{{item}}</p>
+        
+    {% endfor %}
+
+
 
     {% if user.is_authenticated %}
     <h1>Welcome {{user.username}}</h1>
