@@ -1,11 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    my a
-</body>
-</html>
+
+ {% extends 'myapp/layout.html' %}
+{% block body %}
+    <h1>myapp</h1> <a href="logout/">Logout</a>
+
+    {% if user.is_authenticated %}
+    <h1>Welcome {{user.username}}</h1>
+    
+    <div class="form-floating">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="username" value="{{user.username}}">
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="userpost"></textarea>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Comment</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {% for post in userpost %}
+    <hr>
+        <p class="lh-sm" style="padding-left: 10px; margin-top: 3px; ">
+            <b>{{post.username}}</b> <br>
+        {{post.userpost}}
+        </p>
+    {% endfor %}
+
+{% endblock %}
